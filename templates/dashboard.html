@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - TrustLens AI</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- Navigation -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🔍 TrustLens AI
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="/dashboard">
+            Dashboard
+        </a>
+
+        <a href="/logout" class="btn">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- Dashboard Section -->
+
+<section class="dashboard">
+
+
+    <h1>
+        Welcome, {{ fullname }} 👋
+    </h1>
+
+
+    <p>
+        Select an analysis module to check digital trust.
+    </p>
+
+
+
+    <div class="dashboard-cards">
+
+
+
+        <div class="dashboard-card">
+
+            🌐
+
+            <h2>
+                Website Trust Analysis
+            </h2>
+
+            <p>
+                Analyze website security and generate trust score.
+            </p>
+
+            <a href="/website">
+                Start Analysis
+            </a>
+
+        </div>
+
+
+
+
+        <div class="dashboard-card">
+
+            📧
+
+            <h2>
+                Email Trust Analysis
+            </h2>
+
+            <p>
+                Detect suspicious emails and digital threats.
+            </p>
+
+            <a href="/email">
+                Start Analysis
+            </a>
+
+        </div>
+
+
+
+
+
+        <div class="dashboard-card">
+
+            🔐
+
+            <h2>
+                Password Strength
+            </h2>
+
+            <p>
+                Check password security level.
+            </p>
+
+            <a href="/password">
+                Start Analysis
+            </a>
+
+        </div>
+
+
+
+
+
+        <div class="dashboard-card">
+
+            📱
+
+            <h2>
+                QR Trust Analysis
+            </h2>
+
+            <p>
+                Analyze QR codes and identify unsafe links.
+            </p>
+
+            <a href="/qr">
+                Start Analysis
+            </a>
+
+        </div>
+
+                <div class="dashboard-card">
+
+            🖼️
+
+            <h2>
+                Image Forensics
+            </h2>
+
+            <p>
+                Detect editing signs and AI-generation indicators in images.
+            </p>
+
+            <a href="/image">
+                Start Analysis
+            </a>
+
+        </div>
+
+
+
+        <div class="dashboard-card">
+
+            🎬
+
+            <h2>
+                Video Forensics
+            </h2>
+
+            <p>
+                Detect editing and tampering signs in video files.
+            </p>
+
+            <a href="/video">
+                Start Analysis
+            </a>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+<a href="/" class="back-btn">
+    ← Back
+</a>
+
+<script>
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            window.location.href = "/";
+        }
+    });
+</script>
+
+</body>
+
+</html>

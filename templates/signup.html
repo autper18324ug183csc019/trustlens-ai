@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sign Up - TrustLens AI</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
+
+    body {
+        background: #0f172a;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .signup-card {
+        background: #1e293b;
+        padding: 40px;
+        border-radius: 14px;
+        width: 380px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        position: relative;
+    }
+
+    .signup-card h2 {
+        color: #f1f5f9;
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+    .signup-card input {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 14px;
+        border-radius: 8px;
+        border: 1px solid #334155;
+        background: #0f172a;
+        color: #f1f5f9;
+        outline: none;
+    }
+
+    .signup-card input:focus {
+        border-color: #38bdf8;
+    }
+
+    .signup-card button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: #38bdf8;
+        color: #0f172a;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 6px;
+    }
+
+    .signup-card button:hover {
+        background: #0ea5e9;
+    }
+
+    .signin-link {
+        text-align: center;
+        margin-top: 16px;
+        color: #94a3b8;
+        font-size: 14px;
+    }
+
+    .signin-link a {
+        color: #38bdf8;
+        text-decoration: none;
+    }
+
+    .popup-overlay {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 23, 42, 0.85);
+        border-radius: 14px;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+
+    .popup-overlay.show {
+        display: flex;
+    }
+
+    .popup-box {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 24px;
+        width: 85%;
+        text-align: center;
+        animation: popIn 0.2s ease-out;
+    }
+
+    @keyframes popIn {
+        from { transform: scale(0.9); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    .popup-box.error   { border-top: 4px solid #ef4444; }
+    .popup-box.success { border-top: 4px solid #22c55e; }
+
+    .popup-box p {
+        color: #f1f5f9;
+        margin-bottom: 16px;
+        font-size: 14.5px;
+        line-height: 1.4;
+    }
+
+    .popup-box .popup-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .popup-box button {
+        margin-top: 0;
+        flex: 1;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .popup-box .btn-secondary {
+        background: transparent;
+        border: 1px solid #475569;
+        color: #cbd5e1;
+    }
+
+    .popup-box .btn-secondary:hover {
+        background: #334155;
+    }
+
+    .close-btn {
+        position: absolute !important;
+        top: 14px !important;
+        right: 16px !important;
+        left: auto !important;
+        width: 30px !important;
+        height: 30px !important;
+        background: transparent !important;
+        border: none !important;
+        color: #94a3b8 !important;
+        font-size: 22px !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        line-height: 1 !important;
+        margin: 0 !important;
+        border-radius: 50% !important;
+    }
+
+    .close-btn:hover {
+        color: #f1f5f9 !important;
+        background: #334155 !important;
+    }
+
+    .password-wrapper {
+        position: relative;
+        margin-bottom: 14px;
+    }
+
+    .password-wrapper input {
+        margin-bottom: 0;
+        padding-right: 40px;
+        width: 100%;
+    }
+
+    .toggle-eye {
+        position: absolute;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #94a3b8;
+        user-select: none;
+        display: flex;
+        align-items: center;
+    }
+
+    .toggle-eye:hover {
+        color: #f1f5f9;
+    }
+
+</style>
+</head>
+<body>
+
+<div class="signup-card">
+    <button class="close-btn" onclick="window.location.href='/'">&times;</button>
+    <h2>Create Account</h2>
+
+    <form id="signupForm">
+        <input type="text" name="userid" placeholder="User ID" required>
+        <input type="text" name="fullname" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+
+        <div class="password-wrapper">
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <span class="toggle-eye" onclick="togglePassword('password', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </span>
+        </div>
+
+        <div class="password-wrapper">
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+            <span class="toggle-eye" onclick="togglePassword('confirm_password', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </span>
+        </div>
+
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <div class="signin-link">
+        Already have an account? <a href="/signin">Sign In</a>
+    </div>
+
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-box" id="popupBox">
+            <p id="popupMessage"></p>
+            <div class="popup-actions" id="popupActions">
+                <button class="btn-secondary" onclick="closePopup()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const form = document.getElementById("signupForm");
+const popupOverlay = document.getElementById("popupOverlay");
+const popupBox = document.getElementById("popupBox");
+const popupMessage = document.getElementById("popupMessage");
+const popupActions = document.getElementById("popupActions");
+
+form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch("/signup", {
+            method: "POST",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            showPopup(data.message || "Account created successfully!", "success");
+            setTimeout(() => {
+                window.location.href = data.redirect || "/signin";
+            }, 1200);
+        } else {
+            if (response.status === 409) {
+                showPopup(data.message, "error", true);
+            } else {
+                showPopup(data.message, "error");
+            }
+        }
+
+    } catch (err) {
+        showPopup("Something went wrong. Please try again.", "error");
+    }
+});
+
+function showPopup(message, type, showSigninBtn = false) {
+    popupMessage.textContent = message;
+    popupBox.className = "popup-box " + type;
+
+    popupActions.innerHTML = "";
+
+    if (showSigninBtn) {
+        const signinBtn = document.createElement("button");
+        signinBtn.textContent = "Go to Sign In";
+        signinBtn.onclick = () => window.location.href = "/signin";
+        popupActions.appendChild(signinBtn);
+    }
+
+    const closeBtn = document.createElement("button");
+    closeBtn.className = "btn-secondary";
+    closeBtn.textContent = "Close";
+    closeBtn.onclick = closePopup;
+    popupActions.appendChild(closeBtn);
+
+    popupOverlay.classList.add("show");
+}
+
+function closePopup() {
+    popupOverlay.classList.remove("show");
+}
+
+function togglePassword(fieldId, icon) {
+    const field = document.getElementById(fieldId);
+
+    if (field.type === "password") {
+        field.type = "text";
+        icon.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+        `;
+    } else {
+        field.type = "password";
+        icon.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+        `;
+    }
+}
+
+</script>
+
+</body>
+</html>

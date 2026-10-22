@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>TrustLens AI</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🔍 TrustLens AI</h1>
+
+<p>Website Trust Analyzer</p>
+
+<div class="box">
+
+<form action="/analyze" method="POST">
+
+<input
+type="text"
+name="url"
+placeholder="https://example.com"
+required>
+
+<br><br>
+
+<button type="submit">
+
+Analyze Website
+
+</button>
+
+</form>
+
+{% if score is defined %}
+
+<hr>
+
+<div class="result-box">
+
+    <h2>🔍 Website Analysis Result</h2>
+
+    <p>
+        <strong>Website:</strong> {{ url }}
+    </p>
+
+    <h3>
+        Trust Score: {{ score }}/100
+    </h3>
+
+    <h3>
+        {{ status }}
+    </h3>
+
+    <h3>🔒 Security Analysis</h3>
+
+    {% for item, result in results %}
+        <p>
+            <strong>{{ item }}:</strong>
+            {{ result }}
+        </p>
+    {% endfor %}
+
+</div>
+
+{% endif %}

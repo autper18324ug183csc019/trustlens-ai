@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video Forensics - TrustLens AI</title>
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+
+    body {
+        min-height: 100vh;
+        background: #f2f6ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 600px;
+        background: white;
+        padding: 35px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    }
+
+    h1 {
+        text-align: center;
+        color: #1d4ed8;
+        margin-bottom: 10px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 14px;
+    }
+
+    input[type="file"] {
+        width: 100%;
+        padding: 13px;
+        border: 1px dashed #ccc;
+        border-radius: 8px;
+        font-size: 14px;
+        margin-bottom: 20px;
+        background: #f8fafc;
+    }
+
+    .analyze-btn {
+        width: 100%;
+        padding: 13px;
+        border: none;
+        border-radius: 8px;
+        background: #2563eb;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .analyze-btn:hover {
+        background: #1d4ed8;
+    }
+
+    .analyze-btn:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+    }
+
+    .result {
+        margin-top: 25px;
+        padding: 20px;
+        background: #f8fafc;
+        border-radius: 10px;
+    }
+
+    .filename {
+        text-align: center;
+        color: #666;
+        font-size: 13px;
+        margin-bottom: 10px;
+        word-break: break-all;
+    }
+
+    .score {
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: #2563eb;
+        margin: 10px 0;
+    }
+
+    .status {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .reason {
+        padding: 8px 0;
+        border-bottom: 1px solid #ddd;
+        font-size: 14px;
+    }
+
+    .error-msg {
+        color: red;
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .loading-msg {
+        text-align: center;
+        color: #2563eb;
+        margin-top: 10px;
+        font-size: 14px;
+        display: none;
+    }
+
+    .ai-meter-card {
+        margin: 15px 0 20px 0;
+        padding: 16px;
+        border-radius: 10px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .ai-meter-card.ai-zero {
+        border-left: 5px solid #16a34a;
+        background: #f0fdf4;
+    }
+    .ai-meter-card.ai-mid {
+        border-left: 5px solid #f59e0b;
+        background: #fffbeb;
+    }
+    .ai-meter-card.ai-high {
+        border-left: 5px solid #dc2626;
+        background: #fef2f2;
+    }
+    .ai-meter-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .ai-meter-title {
+        font-size: 15px;
+        font-weight: bold;
+        color: #1e293b;
+    }
+    .ai-meter-pct {
+        font-size: 22px;
+        font-weight: 800;
+        color: #1e293b;
+    }
+    .ai-bar-track {
+        width: 100%;
+        height: 10px;
+        background: #e2e8f0;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: 12px;
+    }
+    .ai-bar-fill {
+        height: 100%;
+        border-radius: 5px;
+        transition: width 0.5s ease;
+    }
+    .ai-zero .ai-bar-fill { background: #16a34a; }
+    .ai-mid .ai-bar-fill { background: #f59e0b; }
+    .ai-high .ai-bar-fill { background: #dc2626; }
+
+    .edit-badge {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 8px;
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        color: #0f172a;
+    }
+    .edit-desc {
+        font-size: 13px;
+        line-height: 1.5;
+        color: #334155;
+    }
+
+    .disclaimer {
+        margin-top: 15px;
+        padding: 10px;
+        background: #fff7ed;
+        border: 1px solid #fed7aa;
+        border-radius: 8px;
+        font-size: 12px;
+        color: #9a3412;
+    }
+
+    .back-btn {
+        display: block;
+        width: 120px;
+        margin: 20px auto 0;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 8px;
+        background: #e5e7eb;
+        color: #333;
+    }
+
+    .back-btn:hover {
+        background: #d1d5db;
+    }
+</style>
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>🎬 Video Forensics Analysis</h1>
+        <p class="subtitle">Check videos for editing signs and tampering indicators</p>
+
+        <form id="videoForm" action="{{ url_for('video_analysis') }}" method="POST" enctype="multipart/form-data">
+            <input type="file" name="video_file" accept="video/*" required>
+            <button type="submit" class="analyze-btn" id="submitBtn">🔍 Analyze Video</button>
+        </form>
+
+        <p class="loading-msg" id="loadingMsg">⏳ Analyzing video, please wait...</p>
+
+        {% if error %}
+        <p class="error-msg">{{ error }}</p>
+        {% endif %}
+
+        {% if score is defined %}
+        <div class="result">
+            <p class="filename">File: {{ filename }}</p>
+            <div class="score">{{ score }}/100</div>
+            <div class="status">{{ status }}</div>
+
+            {% if ai_percentage is defined %}
+            <div class="ai-meter-card {% if ai_percentage == 0 %}ai-zero{% elif ai_percentage < 50 %}ai-mid{% else %}ai-high{% endif %}">
+                <div class="ai-meter-header">
+                    <span class="ai-meter-title">🤖 AI / Tampered Content:</span>
+                    <span class="ai-meter-pct">{{ ai_percentage }}%</span>
+                </div>
+                <div class="ai-bar-track">
+                    <div class="ai-bar-fill" style="width: {{ ai_percentage }}%;"></div>
+                </div>
+                <div class="edit-badge">{{ edit_type }}</div>
+                <div class="edit-desc">{{ edit_explanation }}</div>
+            </div>
+            {% endif %}
+
+            {% for label, value in results %}
+            <div class="reason"><strong>{{ label }}:</strong> {{ value }}</div>
+            {% endfor %}
+
+            <div class="disclaimer">
+                ⚠ This is a forensic-indicator analysis (metadata, sampled-frame compression check), not a certified deepfake/AI-detector. Results are best-effort indicators, not definitive proof.
+            </div>
+        </div>
+        {% endif %}
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">← Back</a>
+
+    </div>
+
+<script>
+    document.getElementById("videoForm").addEventListener("submit", function () {
+        document.getElementById("submitBtn").disabled = true;
+        document.getElementById("submitBtn").textContent = "Analyzing...";
+        document.getElementById("loadingMsg").style.display = "block";
+    });
+
+    document.addEventListener("keydown", function(event) {
+        if (event.key === "Escape") {
+            window.location.href = "{{ url_for('dashboard') }}";
+        }
+    });
+</script>
+
+</body>
+</html>
