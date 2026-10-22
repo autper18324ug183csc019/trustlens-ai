@@ -1,7 +1,7 @@
 import re
 import dns.resolver
 
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
 from datetime import datetime
 from urllib.parse import urlparse
 
@@ -192,6 +192,10 @@ def get_domain_age(url):
 
 # HOME
 # =========================================================
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(app.static_folder, filename)
 
 @app.route("/")
 def home():
